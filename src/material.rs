@@ -1,20 +1,16 @@
 use cgmath::Vector3;
 
-#[derive(Debug)]
+#[derive(Clone, Debug)]
 pub enum TextureType {
-    REFRACT,
-    DIFFUSE,
-    SPECULR,
+    REFR,
+    DIFF,
+    SPEC,
+    EMIS,
 }
 
-#[derive(Debug)]
+#[derive(Clone, Debug)]
 pub struct Texture {
     pub weight: u32,
     pub t_type: TextureType,
     pub color: Vector3<f32>,
-}
-
-#[derive(Debug)]
-pub struct Material {
-    pub textures: Vec<Texture>,
 }

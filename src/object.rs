@@ -1,4 +1,3 @@
-mod material;
 use crate::material::Texture;
 use cgmath::Vector3;
 
@@ -8,6 +7,7 @@ pub trait Object{
     fn get_normale(&self, point: Vector3<f32>)->Vector3<f32>;
 }
 
+#[derive(Clone, Debug)]
 pub struct Sphere{
     pub pos: Vector3<f32>,
     pub rayon: f32,
@@ -21,7 +21,7 @@ impl Object for Sphere{
     }
 
     fn get_mat(&self)-> Vec<Texture>{
-        return self.textures;
+        return self.textures.clone();
     }
 
     fn get_normale(&self, point: Vector3<f32>)->Vector3<f32>{
