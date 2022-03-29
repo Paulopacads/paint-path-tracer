@@ -74,52 +74,8 @@ int main(int argc, char *argv[])
                 new PointLightSource(Vector3(source["pos"]),
                                      Vector3(source["col"]), source["inty"]));
 
-    Material *material =
-        new UniformMaterial(Vector3(.4, .8, .1), 1, .6, .2, 0, 1);
-    Vector3 origin = Vector3(7.5, -10, 0);
-    double size = 20;
-    int disc = 5;
-    double min = 5;
-    double ***poten = (double ***)malloc((disc + 1) * sizeof(double **));
-    for (int i = 0; i < disc + 1; ++i)
-    {
-        poten[i] = (double **)malloc((disc + 1) * sizeof(double *));
-        for (int j = 0; j < disc + 1; ++j)
-        {
-            poten[i][j] = (double *)malloc((disc + 1) * sizeof(double));
-            for (int k = 0; k < disc + 1; ++k)
-                poten[i][j][k] = 0;
-        }
-    }
-
-    poten[1][1][2] = poten[1][2][2] = poten[1][3][2] = poten[1][4][2] =
-        poten[1][2][3] = poten[1][3][3] = poten[1][4][3] = 6;
-
-    poten[2][2][1] = poten[2][3][1] = poten[2][1][2] = poten[2][2][2] =
-        poten[2][3][2] = poten[2][4][2] = poten[2][1][3] = poten[2][2][3] =
-            poten[2][3][3] = poten[2][4][3] = poten[2][1][4] = poten[2][2][4] =
-                6;
-
-    poten[3][2][1] = poten[3][3][1] = poten[3][1][2] = poten[3][2][2] =
-        poten[3][3][2] = poten[3][1][3] = poten[3][2][3] = poten[3][3][3] =
-            poten[3][2][4] = 6;
-
-    poten[3][2][1] = poten[3][3][1] = poten[3][1][2] = poten[3][2][2] =
-        poten[3][3][2] = poten[3][2][3] = poten[3][3][3] = poten[3][3][4] = 6;
-
-    scene1.objects.push_back(
-        new Blob(material, origin, size, disc, min, poten));
-
     Image image = raytrace(scene1, width, height);
     image.save(json["name"]);
-
-    for (int i = 0; i < disc + 1; ++i)
-    {
-        for (int j = 0; j < disc + 1; ++j)
-            free(poten[i][j]);
-        free(poten[i]);
-    }
-    free(poten);
 
     return 0;
 }
