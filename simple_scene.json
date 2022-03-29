@@ -34,8 +34,8 @@
                     "type": "UniformMaterial",
                     "col": { "x": 0.9, "y": 0.9, "z": 0.9 },
                     "kd": 0,
-                    "ks": 0.8,
-                    "kt": 0,
+                    "ks": 0.2,
+                    "kt": 1,
                     "ka": 1,
                     "nref": 1.54
                 }
