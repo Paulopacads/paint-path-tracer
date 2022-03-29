@@ -41,19 +41,3 @@ public:
     struct NextObject intersect(Vector3, Vector3);
     Vector3 normal(Vector3);
 };
-
-class Blob : public Object
-{
-public:
-    std::vector<Triangle *> triangles;
-
-    Blob(Material *, Vector3, double, int, double, double ***);
-    struct NextObject intersect(Vector3, Vector3);
-    Vector3 normal(Vector3);
-};
-
-struct NextObject
-{
-    Object *object;
-    double distance;
-};
