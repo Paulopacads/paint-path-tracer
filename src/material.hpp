@@ -10,6 +10,7 @@ struct MaterialInfo
     double ks;
     double kt;
     double ka;
+    double ke;
 };
 
 class Material
@@ -27,8 +28,9 @@ public:
     double ks;
     double kt;
     double ka;
+    double ke;
 
-    UniformMaterial(Vector3, double, double, double, double, double);
+    UniformMaterial(Vector3, double, double, double, double, double, double);
     UniformMaterial(nlohmann::json);
     struct MaterialInfo getMaterialInfo(Vector3);
 };
@@ -42,8 +44,9 @@ public:
     double ks;
     double kt;
     double ka;
+    double ke;
 
-    ApplyMaterial(double (*)(double), double, double, double, double, double);
+    ApplyMaterial(double (*)(double), double, double, double, double, double, double);
     ApplyMaterial(nlohmann::json, double (*)(double));
     struct MaterialInfo getMaterialInfo(Vector3);
 };

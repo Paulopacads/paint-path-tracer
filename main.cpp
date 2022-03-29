@@ -68,12 +68,6 @@ int main(int argc, char *argv[])
         }
     }
 
-    for (nlohmann::json source : scene["src"])
-        if (source["type"] == "PointLightSource")
-            scene1.sources.push_back(
-                new PointLightSource(Vector3(source["pos"]),
-                                     Vector3(source["col"]), source["inty"]));
-
     Image image = raytrace(scene1, width, height);
     image.save(json["name"]);
 

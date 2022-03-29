@@ -10,7 +10,6 @@ Scene::Scene(Camera camera, Vector3 ambiant, Vector3 sky)
     , sky(sky)
 {
     objects = {};
-    sources = {};
 }
 
 inline struct NextObject getNextObject(Scene *scene, Vector3 origin,
@@ -34,54 +33,7 @@ inline Vector3 computeLightning(Scene *scene, Vector3 contact, Vector3 vector,
                                 Vector3 normal, struct NextObject next)
 {
     struct MaterialInfo material = next.object->getMaterialInfo(contact);
-
-    Vector3 diffuseComponent = scene->ambiant * material.ka;
-    Vector3 specularComponent = Vector3();
-
-    for (LightSource *source : scene->sources)
-    {
-        Vector3 lightRay = source->position - contact;
-        Vector3 lightRayNorm = lightRay.norm();
-        struct NextObject toLight =
-            getNextObject(scene, contact + lightRayNorm * .0001, lightRayNorm);
-
-        if (toLight.object == NULL || toLight.distance > lightRay.size())
-        {
-            Vector3 lightReflection =
-                (lightRayNorm - normal * (lightRayNorm * 2).dot(normal)).norm();
-
-            diffuseComponent = diffuseComponent
-                + source->color * source->lightness * lightRayNorm.dot(normal)
-                    / lightRay.size();
-
-            specularComponent = specularComponent
-                + source->color * pow(lightReflection.dot(vector), 15)
-                    * source->lightness;
-        }
-        else if (toLight.object->getMaterialInfo(contact).kt != 0)
-        {
-            struct MaterialInfo toLightMat =
-                toLight.object->getMaterialInfo(contact);
-            Vector3 lightReflection =
-                (lightRayNorm - normal * (lightRayNorm * 2).dot(normal)).norm();
-
-            diffuseComponent = diffuseComponent
-                + source->color * source->lightness * lightRayNorm.dot(normal)
-                    * toLightMat.kt / toLightMat.nrefr / lightRay.size();
-
-            specularComponent = specularComponent
-                + source->color * pow(lightReflection.dot(vector), 15)
-                    * source->lightness * toLightMat.kt / toLightMat.nrefr;
-        }
-    }
-
-    Vector3 color = material.color * material.kd;
-    diffuseComponent.x *= color.x;
-    diffuseComponent.y *= color.y;
-    diffuseComponent.z *= color.z;
-
-    specularComponent = specularComponent * material.ks;
-    return diffuseComponent + specularComponent;
+    return material.color;
 }
 
 inline Vector3 computeRefraction(Scene *scene, Vector3 contact, Vector3 vector,

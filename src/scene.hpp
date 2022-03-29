@@ -10,7 +10,6 @@ class Scene
 {
 public:
     std::vector<Object *> objects;
-    std::vector<LightSource *> sources;
     Camera camera;
     Vector3 ambiant;
     Vector3 sky;
