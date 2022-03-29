@@ -41,3 +41,9 @@ public:
     struct NextObject intersect(Vector3, Vector3);
     Vector3 normal(Vector3);
 };
+
+struct NextObject
+{
+    Object *object;
+    double distance;
+};
