@@ -1,19 +1,15 @@
 CC=g++
+CFLAGS= -g -Wall -Wextra -std=c++11 -pedantic
 
+BIN=ppt
 SRC=$(wildcard src/*.cpp) $(wildcard libs/*.cpp)
 OBJ=$(SRC:.cpp=.o)
 MAIN=main.cpp
 
-all: raytracer
+all: paint_pathtracer
 
-raytracer: main.o $(OBJ)
-	$(CC) $^ -o raytracer -O3
-
-
-%.o: %.c
-	$(CC) -c $< -o $@ -O3
+paint_pathtracer: main.o $(OBJ)
+	$(CC) $(CFLAGS) $^ -o $(BIN) -O3
 
 clean:
-	-$(RM) raytracer
-	-$(RM) $(OBJ)
-	-$(RM) main.o
+	$(RM) $(BIN) $(OBJ) main.o $(DEPS)
