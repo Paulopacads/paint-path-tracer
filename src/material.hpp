@@ -2,15 +2,14 @@
 
 #include "vector3.hpp"
 
-struct MaterialInfo
+struct MaterialInfo // describes material info for one position
 {
     Vector3 color;
-    double nrefr;
-    double kd;
-    double ks;
-    double kt;
-    double ka;
-    double ke;
+    double nrefr; // refraction coeff. of the object
+    double ke; // emission
+    double kd; // diffusion
+    double ks; // specularity
+    double kt; // transparency
 };
 
 class Material
@@ -24,29 +23,12 @@ class UniformMaterial : public Material
 public:
     Vector3 color;
     double nrefr;
+    double ke;
     double kd;
     double ks;
     double kt;
-    double ka;
-    double ke;
 
-    UniformMaterial(Vector3, double, double, double, double, double, double);
+    UniformMaterial(Vector3, double, double, double, double, double);
     UniformMaterial(nlohmann::json);
-    struct MaterialInfo getMaterialInfo(Vector3);
-};
-
-class ApplyMaterial : public Material
-{
-public:
-    double (*apply)(double);
-    double nrefr;
-    double kd;
-    double ks;
-    double kt;
-    double ka;
-    double ke;
-
-    ApplyMaterial(double (*)(double), double, double, double, double, double, double);
-    ApplyMaterial(nlohmann::json, double (*)(double));
     struct MaterialInfo getMaterialInfo(Vector3);
 };

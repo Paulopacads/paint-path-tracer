@@ -43,7 +43,7 @@ struct NextObject Sphere::intersect(Vector3 origin, Vector3 vector)
     double b = op.dot(vector);
     double det = b * b - op.dot(op) + this->radius * this->radius;
     if (det < 0)
-        return { this, 0 };
+        return { this, HUGE_VAL };
     else
         det = sqrt(det);
     return { this,
@@ -77,9 +77,9 @@ struct NextObject Plane::intersect(Vector3 origin, Vector3 vector)
         if (t > eps)
             return { this, t };
         else
-            return { NULL, HUGE_VAL };
+            return { this, HUGE_VAL };
     }
-    return { NULL, HUGE_VAL };
+    return { this, HUGE_VAL };
 }
 
 Vector3 Plane::normal(Vector3 point)
