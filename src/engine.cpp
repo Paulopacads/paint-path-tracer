@@ -23,6 +23,7 @@ Image raytrace(Scene scene, int width, int height, int spp)
     Vector3 plantopleft = plancenter + scene.camera.up * planheight / 2
         - scene.camera.right * planwidth / 2;
 
+#pragma omp parallel for schedule(dynamic)
     for (int j = 0; j < height; ++j)
         for (int i = 0; i < width; ++i)
         {
@@ -43,7 +44,8 @@ Image raytrace(Scene scene, int width, int height, int spp)
             for (int s = 1; s < spp; ++s)
             {
                 double ns = s + 1;
-                color = color * (s / ns) + scene.castRay(origin, vector, 5) / ns;
+                color =
+                    color * (s / ns) + scene.castRay(origin, vector, 5) / ns;
             }
             image.setPixel(i, j, color);
         }

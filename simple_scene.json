@@ -3,8 +3,6 @@
     "width": 2048,
     "height": 1536,
     "spp": 32,
-    "with_seed": true,
-    "seed": 0,
     "scene":
     {
         "cam":

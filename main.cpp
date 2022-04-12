@@ -23,11 +23,6 @@ int main(int argc, char *argv[])
     double width = json["width"];
     double height = json["height"];
 
-    if (json["with_seed"])
-        srand(json["seed"]);
-    else
-        srand(time(NULL));
-
     Vector3 camPos = Vector3(cam["pos"]);
     Vector3 camLook = Vector3(cam["look"]);
     Vector3 camUp = Vector3(cam["up"]);
