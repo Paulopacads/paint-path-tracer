@@ -1,8 +1,10 @@
 {
     "name": "my_raytracer_result",
-    "width": 2048,
-    "height": 1536,
-    "spp": 32,
+    "width": 512,
+    "height": 384,
+    "spp": 128,
+    "halton": 3,
+    "with_seed": false,
     "scene":
     {
         "cam":
@@ -13,24 +15,37 @@
             "fov": 90,
             "dist": 1
         },
-        "amb": { "x": 0.05, "y": 0.05, "z": 0.05 },
         "sky": { "x": 0, "y": 0, "z": 0.01 },
         "obj":
         [
             {
                 "type": "Sphere",
-                "pos": { "x": 6.5, "y": -2, "z": 1.5 },
+                "pos": { "x": 5, "y": 0, "z": 8.5 },
                 "rad": 1.5,
                 "mat":
                 {
                     "type": "UniformMaterial",
-                    "col": { "x": 0.9, "y": 0.9, "z": 0.9 },
+                    "col": { "x": 9, "y": 9, "z": 9 },
+                    "kd": 1,
+                    "ks": 0,
+                    "kt": 0,
+                    "ke": 0.25,
+                    "nref": 1
+                }
+            },
+            {
+                "type": "Sphere",
+                "pos": { "x": 6.5, "y": -2, "z": 2 },
+                "rad": 1,
+                "mat":
+                {
+                    "type": "UniformMaterial",
+                    "col": { "x": 9, "y": 9, "z": 9 },
                     "kd": 0,
-                    "ks": 0.2,
+                    "ks": 0,
                     "kt": 1,
-                    "ka": 1,
                     "ke": 0,
-                    "nref": 1.54
+                    "nref": 2.4
                 }
             },
             {
@@ -40,107 +55,112 @@
                 "mat":
                 {
                     "type": "UniformMaterial",
-                    "col": { "x": 0.9, "y": 0.9, "z": 0.9 },
-                    "kd": 0.05,
+                    "col": { "x": 9, "y": 9, "z": 9 },
+                    "kd": 0.2,
                     "ks": 0.8,
                     "kt": 0,
-                    "ka": 1,
-                    "ke": 0,
-                    "nref": 1.54
-                }
-            },
-            {
-                "type": "Sphere",
-                "pos": { "x": 0, "y": 0, "z": -100000 },
-                "rad": 100000,
-                "mat":
-                {
-                    "type": "UniformMaterial",
-                    "col": { "x": 0.85, "y": 0.85, "z": 0.85 },
-                    "kd": 0.8,
-                    "ks": 0,
-                    "kt": 0,
-                    "ka": 1,
                     "ke": 0,
                     "nref": 1
                 }
             },
             {
-                "type": "Sphere",
-                "pos": { "x": 0, "y": 0, "z": 100007.5 },
-                "rad": 100000,
+                "type": "Plane",
+                "pos": {
+                    "norm": { "x": 0, "y": 0, "z": 1 },
+                    "d": 0
+                },
                 "mat":
                 {
                     "type": "UniformMaterial",
-                    "col": { "x": 0.85, "y": 0.85, "z": 0.85 },
-                    "kd": 0.8,
+                    "col": { "x": 8.5, "y": 8.5, "z": 8.5 },
+                    "kd": 1,
                     "ks": 0,
                     "kt": 0,
-                    "ka": 1,
                     "ke": 0,
                     "nref": 1
                 }
             },
             {
-                "type": "Sphere",
-                "pos": { "x": 100010, "y": 0, "z": 0 },
-                "rad": 100000,
+                "type": "Plane",
+                "pos": {
+                    "norm": { "x": 0, "y": 0, "z": -1 },
+                    "d": 7.5
+                },
                 "mat":
                 {
                     "type": "UniformMaterial",
-                    "col": { "x": 0.85, "y": 0.85, "z": 0.85 },
-                    "kd": 0.8,
+                    "col": { "x": 8.5, "y": 8.5, "z": 8.5 },
+                    "kd": 1,
                     "ks": 0,
                     "kt": 0,
-                    "ka": 1,
                     "ke": 0,
                     "nref": 1
                 }
             },
             {
-                "type": "Sphere",
-                "pos": { "x": 0, "y": 100005, "z": 0 },
-                "rad": 100000,
+                "type": "Plane",
+                "pos": {
+                    "norm": { "x": -1, "y": 0, "z": 0 },
+                    "d": 10
+                },
                 "mat":
                 {
                     "type": "UniformMaterial",
-                    "col": { "x": 0.95, "y": 0.15, "z": 0.15 },
-                    "kd": 0.8,
+                    "col": { "x": 8.5, "y": 8.5, "z": 8.5 },
+                    "kd": 1,
                     "ks": 0,
                     "kt": 0,
-                    "ka": 1,
                     "ke": 0,
                     "nref": 1
                 }
             },
             {
-                "type": "Sphere",
-                "pos": { "x": 0, "y": -100005, "z": 0 },
-                "rad": 100000,
+                "type": "Plane",
+                "pos": {
+                    "norm": { "x": 0, "y": 1, "z": 0 },
+                    "d": 5
+                },
                 "mat":
                 {
                     "type": "UniformMaterial",
-                    "col": { "x": 0.15, "y": 0.15, "z": 0.95 },
-                    "kd": 0.8,
+                    "col": { "x": 9.5, "y": 1.5, "z": 1.5 },
+                    "kd": 1,
                     "ks": 0,
                     "kt": 0,
-                    "ka": 1,
                     "ke": 0,
                     "nref": 1
                 }
             },
             {
-                "type": "Sphere",
-                "pos": { "x": -100001, "y": 0, "z": -10 },
-                "rad": 100000,
+                "type": "Plane",
+                "pos": {
+                    "norm": { "x": 0, "y": -1, "z": 0 },
+                    "d": 5
+                },
                 "mat":
                 {
                     "type": "UniformMaterial",
-                    "col": { "x": 0.01, "y": 0.01, "z": 0.01 },
-                    "kd": 0.8,
+                    "col": { "x": 1.5, "y": 1.5, "z": 9.5 },
+                    "kd": 1,
                     "ks": 0,
                     "kt": 0,
-                    "ka": 1,
+                    "ke": 0,
+                    "nref": 1
+                }
+            },
+            {
+                "type": "Plane",
+                "pos": {
+                    "norm": { "x": 1, "y": 0, "z": 1 },
+                    "d": 0
+                },
+                "mat":
+                {
+                    "type": "UniformMaterial",
+                    "col": { "x": 0.1, "y": 0.1, "z": 0.1 },
+                    "kd": 1,
+                    "ks": 0,
+                    "kt": 0,
                     "ke": 0,
                     "nref": 1
                 }

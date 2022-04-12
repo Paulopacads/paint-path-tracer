@@ -1,7 +1,9 @@
+#include <iostream>
 #include "halton.hpp"
 
 void Halton::init(int index, int base)
 {
+    this->base = base;
     double f = 1;
     double r = 0;
     while (index > 0)

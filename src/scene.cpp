@@ -1,12 +1,12 @@
 #include <cmath>
 #include <iostream>
 #include <math.h>
+#include <random>
 
 #include "scene.hpp"
 
-Scene::Scene(Camera camera, Vector3 ambiant, Vector3 sky)
+Scene::Scene(Camera camera, Vector3 sky)
     : camera(camera)
-    , ambiant(ambiant)
     , sky(sky)
 {
     objects = {};
@@ -29,74 +29,76 @@ inline struct NextObject getNextObject(Scene *scene, Vector3 origin,
     return res;
 }
 
-inline Vector3 computeLightning(Scene *scene, Vector3 contact, Vector3 vector,
-                                Vector3 normal, struct NextObject next)
+inline Vector3 multChannels(Vector3 v1, Vector3 v2)
 {
-    struct MaterialInfo material = next.object->getMaterialInfo(contact);
-    return material.color;
+    return Vector3(v1.x * v2.x, v1.y * v2.y, v1.z * v2.z);
 }
 
-inline Vector3 computeRefraction(Scene *scene, Vector3 contact, Vector3 vector,
-                                 Vector3 normal, struct NextObject next)
+inline Vector3 hemisphere(double u1, double u2)
 {
-    double n = next.object->getMaterialInfo(contact).nrefr;
-    double cosI = normal.dot(vector);
-    if (cosI < 0)
-        cosI = -cosI;
-    else
-    {
-        n = 1 / n;
-        normal = normal * -1;
-    }
-
-    double sinT2 = n * n * (1 - cosI * cosI);
-    if (1 - sinT2 < 0)
-        return (vector - normal * (vector * 2).dot(normal)).norm();
-
-    double cosT = sqrt(1 - sinT2);
-    Vector3 vect = vector * n + normal * (n * cosI - cosT);
-    //  std::cout << "entry angle: " << acos(vector.norm().dot(normal.norm())) /
-    //  M_PI * 180
-    //            << "\nexit angle: " << acos(vect.norm().dot(normal.norm() *
-    //            -1)) / M_PI * 180
-    //            << "\n\n";
-    return vect;
+    double r = sqrt(1. - u1 * u1);
+    double phi = 2 * M_PI * u2;
+    return Vector3(cos(phi) * r, sin(phi) * r, u1);
 }
 
-Vector3 Scene::castRay(Vector3 origin, Vector3 vector, int depth)
+Vector3 Scene::castRay(Vector3 origin, Vector3 vector, int depth, Halton *gen1,
+                       Halton *gen2)
 {
-    struct NextObject next = getNextObject(this, origin, vector);
-
-    if (next.object != NULL)
+    if (depth > 0)
     {
-        Vector3 contact = origin + vector * next.distance;
-        struct MaterialInfo material = next.object->getMaterialInfo(contact);
-        Vector3 normal = next.object->normal(contact).norm();
-
-        Vector3 result = computeLightning(this, contact, vector, normal, next);
-
-        if (depth)
+        struct NextObject next = getNextObject(this, origin, vector);
+        if (next.object != NULL)
         {
-            if (material.ks > 0)
+            Vector3 impact = origin + vector * next.distance;
+            Vector3 normal = next.object->normal(impact);
+            struct MaterialInfo material = next.object->getMaterialInfo(impact);
+
+            Vector3 color = Vector3(1, 1, 1) * material.ke * 2;
+
+            int r = rand() % PROB_PRECISION;
+            int pd = material.kd * PROB_PRECISION; // probability of diff ray
+            int ps = material.ks * PROB_PRECISION; // probability of spec ray
+
+            if (r <= pd)
             {
-                Vector3 refl =
-                    (vector - normal * (vector * 2).dot(normal)).norm();
-                result = result
-                    + castRay(contact + refl * .0001, refl, depth - 1)
-                        * material.ks;
+                gen1->next();
+                gen2->next();
+
+                Vector3 new_dir = normal + hemisphere(gen1->get(), gen2->get());
+                Vector3 bnc = castRay(impact + new_dir * 1e-4, new_dir, depth - 1, gen1, gen2);
+
+                return color
+                    + multChannels(material.color, bnc) * .1
+                    * new_dir.dot(normal);
             }
-            if (material.kt > 0)
+            else if (r <= pd + ps)
             {
-                Vector3 refr =
-                    computeRefraction(this, contact, vector, normal, next)
-                        .norm();
-                result = result
-                    + castRay(contact + refr * .0001, refr, depth - 1)
-                        * material.kt;
+                Vector3 new_dir =
+                    (vector - normal * vector.dot(normal) * 2).norm();
+
+                return color + castRay(impact + new_dir * 1e-4, new_dir, depth - 1, gen1, gen2);
+            }
+            else
+            {
+                double nrefr = 1 / material.nrefr;
+                if (normal.dot(vector) > 0)
+                {
+                    normal = normal * -1;
+                    nrefr = 1 / nrefr;
+                }
+                double c1 = normal.dot(vector) * -1;
+                double c2 = 1 - nrefr * nrefr * (1 - c1 * c1);
+                if (c2 > 0)
+                {
+                    Vector3 new_dir =
+                        (vector * nrefr + normal * (nrefr * c1 - sqrt(c2)))
+                            .norm();
+                    return color
+                        + castRay(impact + new_dir * 1e-4, new_dir, depth - 1, gen1, gen2);
+                }
             }
         }
-
-        return result;
+        return Vector3();
     }
 
     return this->sky;

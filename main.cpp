@@ -15,6 +15,11 @@ int main(int argc, char *argv[])
 
     source.close();
 
+    if (json["with_seed"])
+        srand(json["seed"]);
+    else
+        srand(time(NULL));
+
     nlohmann::json scene = json["scene"];
     nlohmann::json cam = scene["cam"];
     nlohmann::json sources = scene["src"];
@@ -30,10 +35,9 @@ int main(int argc, char *argv[])
     Camera camera =
         Camera(camPos, camLook, camUp, cam["fov"], cam["dist"], height / width);
 
-    Vector3 ambiant = Vector3(scene["amb"]);
     Vector3 sky = Vector3(scene["sky"]);
 
-    Scene scene1 = Scene(camera, ambiant, sky);
+    Scene scene1 = Scene(camera, sky);
 
     for (nlohmann::json object : scene["obj"])
     {
@@ -61,7 +65,7 @@ int main(int argc, char *argv[])
         }
     }
 
-    Image image = raytrace(scene1, width, height, json["spp"]);
+    Image image = raytrace(scene1, width, height, json["spp"], json["halton"]);
     image.save(json["name"]);
 
     return 0;

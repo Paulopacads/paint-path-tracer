@@ -43,7 +43,7 @@ struct NextObject Sphere::intersect(Vector3 origin, Vector3 vector)
     double b = op.dot(vector);
     double det = b * b - op.dot(op) + this->radius * this->radius;
     if (det < 0)
-        return { this, HUGE_VAL };
+        return { this, 0 };
     else
         det = sqrt(det);
     return { this,

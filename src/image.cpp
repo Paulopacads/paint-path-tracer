@@ -12,9 +12,7 @@ inline double clamp(double x)
 inline int toInt(double n)
 {
     int res = int(pow(clamp(n), 1 / 2.2) * 255 + .5);
-    if (res > 255)
-        std::cout << res << '\n';
-    return res;
+    return res > 255 ? 255 : res < 0 ? 0 : res;
 }
 
 Image::Image(int width, int height)
