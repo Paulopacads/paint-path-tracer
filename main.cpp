@@ -1,5 +1,7 @@
 #include <cstdlib>
+#include <ctime>
 #include <fstream>
+#include <random>
 
 #include "libs/json.cpp"
 #include "src/engine.hpp"
@@ -20,6 +22,11 @@ int main(int argc, char *argv[])
 
     double width = json["width"];
     double height = json["height"];
+
+    if (json["with_seed"])
+        srand(json["seed"]);
+    else
+        srand(time(NULL));
 
     Vector3 camPos = Vector3(cam["pos"]);
     Vector3 camLook = Vector3(cam["look"]);

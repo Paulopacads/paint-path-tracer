@@ -38,6 +38,7 @@ Image raytrace(Scene scene, int width, int height, int spp)
                 - scene.camera.up * planheight * (j + .5) / height;
 
             Vector3 vector = (fakeorigin - scene.camera.center).norm();
+
             Vector3 color = scene.castRay(origin, vector, 5);
             for (int s = 1; s < spp; ++s)
             {
