@@ -60,49 +60,29 @@ Vector3 Sphere::normal(Vector3 point)
     return point - this->center;
 }
 
-Triangle::Triangle(Material *material, Vector3 coord_a, Vector3 coord_b,
-                   Vector3 coord_c)
+Plane::Plane(Material *material, Vector3 norm, double d)
     : Object(material)
 {
-    this->coord_a = coord_a;
-    this->coord_b = coord_b;
-    this->coord_c = coord_c;
+    this->norm = norm;
+    this->d = d;
 }
 
-struct NextObject Triangle::intersect(Vector3 origin, Vector3 vector)
+struct NextObject Plane::intersect(Vector3 origin, Vector3 vector)
 {
     double eps = 1e-4;
-    Vector3 ba = this->coord_a - this->coord_b;
-    Vector3 bc = this->coord_c - this->coord_b;
-    Vector3 h = vector.cross(bc);
-
-    double a = ba.dot(h);
-    if (a > -eps && a < eps)
-        return { NULL, HUGE_VAL };
-
-    double f = 1 / a;
-    Vector3 bo = origin - this->coord_b;
-
-    double u = f * bo.dot(h);
-    if (u < 0 || u > 1)
-        return { NULL, HUGE_VAL };
-
-    Vector3 q = bo.cross(ba);
-
-    double v = f * vector.dot(q);
-    if (v < 0 || u + v > 1)
-        return { NULL, HUGE_VAL };
-
-    float t = f * bc.dot(q);
-    if (t > eps)
-        return { this, t };
-    else
-        return { NULL, HUGE_VAL };
+    double d0;
+    if ((d0 = norm.dot(vector)) != 0)
+    {
+        double t = -1 * (norm.dot(origin) + d) / d0;
+        if (t > eps)
+            return { this, t };
+        else
+            return { NULL, HUGE_VAL };
+    }
+    return { NULL, HUGE_VAL };
 }
 
-Vector3 Triangle::normal(Vector3 point)
+Vector3 Plane::normal(Vector3 point)
 {
-    Vector3 ba = this->coord_a - this->coord_b;
-    Vector3 bc = this->coord_c - this->coord_b;
-    return ba.cross(bc).norm();
+    return this->norm;
 }
