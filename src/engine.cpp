@@ -3,7 +3,7 @@
 
 #include "engine.hpp"
 
-Image raytrace(Scene scene, int width, int height)
+Image raytrace(Scene scene, int width, int height, int spp)
 {
     Image image = Image(width, height);
 
@@ -38,7 +38,12 @@ Image raytrace(Scene scene, int width, int height)
                 - scene.camera.up * planheight * (j + .5) / height;
 
             Vector3 vector = (fakeorigin - scene.camera.center).norm();
-            Vector3 color = scene.castRay(origin, vector, 1);
+            Vector3 color = scene.castRay(origin, vector, 5);
+            for (int s = 1; s < spp; ++s)
+            {
+                double ns = s + 1;
+                color = color * (s / ns) + scene.castRay(origin, vector, 5) / ns;
+            }
             image.setPixel(i, j, color);
         }
     return image;

@@ -18,8 +18,8 @@ public:
     Vector3 cross(const Vector3 &v) const;
     Vector3 norm() const;
     double size() const;
-    Vector3 operator*(const float &) const;
-    Vector3 operator/(const float &) const;
+    Vector3 operator*(const double &) const;
+    Vector3 operator/(const double &) const;
     Vector3 operator+(const Vector3 &) const;
     Vector3 operator-(const Vector3 &) const;
     friend std::ostream &operator<<(std::ostream &, const Vector3 &);

@@ -40,35 +40,26 @@ int main(int argc, char *argv[])
             Material *material;
             if (object["mat"]["type"] == "UniformMaterial")
                 material = new UniformMaterial(object["mat"]);
-            else if (object["mat"]["type"] == "SinMaterial")
-                material = new ApplyMaterial(object["mat"], [](double a) {
-                    return std::rand() % 100 / 100.;
-                });
             else
                 material = new Material();
 
             scene1.objects.push_back(
                 new Sphere(material, Vector3(object["pos"]), object["rad"]));
         }
-        else if (object["type"] == "Triangle")
+        else if (object["type"] == "Plane")
         {
             Material *material;
             if (object["mat"]["type"] == "UniformMaterial")
                 material = new UniformMaterial(object["mat"]);
-            else if (object["mat"]["type"] == "SinMaterial")
-                material = new ApplyMaterial(object["mat"], [](double a) {
-                    return std::rand() % 100 / 100.;
-                });
             else
                 material = new Material();
 
-            scene1.objects.push_back(new Triangle(
-                material, Vector3(object["pos"]["a"]),
-                Vector3(object["pos"]["b"]), Vector3(object["pos"]["c"])));
+            scene1.objects.push_back(new Plane(
+                material, Vector3(object["pos"]["norm"]), object["pos"]["d"]));
         }
     }
 
-    Image image = raytrace(scene1, width, height);
+    Image image = raytrace(scene1, width, height, json["spp"]);
     image.save(json["name"]);
 
     return 0;

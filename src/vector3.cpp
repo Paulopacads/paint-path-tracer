@@ -45,12 +45,12 @@ double Vector3::size() const
     return sqrt(this->x * this->x + this->y * this->y + this->z * this->z);
 }
 
-Vector3 Vector3::operator*(const float &l) const
+Vector3 Vector3::operator*(const double &l) const
 {
     return Vector3(l * this->x, l * this->y, l * this->z);
 }
 
-Vector3 Vector3::operator/(const float &l) const
+Vector3 Vector3::operator/(const double &l) const
 {
     return Vector3(this->x / l, this->y / l, this->z / l);
 }

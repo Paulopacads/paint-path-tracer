@@ -2,6 +2,7 @@
     "name": "my_raytracer_result",
     "width": 2048,
     "height": 1536,
+    "spp": 32,
     "scene":
     {
         "cam":

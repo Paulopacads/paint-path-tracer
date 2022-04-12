@@ -3,4 +3,4 @@
 #include "image.hpp"
 #include "scene.hpp"
 
-Image raytrace(Scene, int, int);
+Image raytrace(Scene, int, int, int);
