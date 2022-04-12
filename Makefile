@@ -1,5 +1,5 @@
 CC=g++
-CFLAGS= -g -Wall -Wextra -std=c++11 -pedantic
+CFLAGS= -g -Wall -Wextra -std=c++20 -pedantic -fopenmp
 
 BIN=ppt
 SRC=$(wildcard src/*.cpp) $(wildcard libs/*.cpp)
@@ -8,7 +8,7 @@ MAIN=main.cpp
 
 all: paint_pathtracer
 
-paint_pathtracer: main.o $(OBJ)
+paint_pathtracer: main.cpp $(SRC)
 	$(CC) $(CFLAGS) $^ -o $(BIN) -O3
 
 clean:
