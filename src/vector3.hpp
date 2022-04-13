@@ -14,6 +14,7 @@ public:
     Vector3();
     Vector3(nlohmann::json);
     Vector3(double, double, double);
+    Vector3 mult(const Vector3 &) const;
     double dot(const Vector3 &) const;
     Vector3 cross(const Vector3 &v) const;
     Vector3 norm() const;

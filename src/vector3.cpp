@@ -21,6 +21,11 @@ Vector3::Vector3(nlohmann::json json)
     this->z = json["z"];
 }
 
+Vector3 Vector3::mult(const Vector3 &v) const
+{
+    return Vector3(this->x * v.x, this->y * v.y, this->z * v.z);
+}
+
 double Vector3::dot(const Vector3 &v) const
 {
     return this->x * v.x + this->y * v.y + this->z * v.z;

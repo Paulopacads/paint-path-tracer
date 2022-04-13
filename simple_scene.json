@@ -1,5 +1,5 @@
 {
-    "name": "my_raytracer_result",
+    "name": "my_ppt_result",
     "width": 512,
     "height": 384,
     "spp": 32,
@@ -29,7 +29,7 @@
                     "kd": 1,
                     "ks": 0,
                     "kt": 0,
-                    "ke": 0.8,
+                    "ke": 1,
                     "nref": 1
                 }
             },
@@ -45,7 +45,7 @@
                     "ks": 0,
                     "kt": 1,
                     "ke": 0,
-                    "nref": 2.4
+                    "nref": 1.9
                 }
             },
             {
@@ -56,8 +56,8 @@
                 {
                     "type": "UniformMaterial",
                     "col": { "x": 0.9, "y": 0.9, "z": 0.9 },
-                    "kd": 0.2,
-                    "ks": 0.8,
+                    "kd": 0,
+                    "ks": 1,
                     "kt": 0,
                     "ke": 0,
                     "nref": 1

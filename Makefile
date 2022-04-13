@@ -9,7 +9,7 @@ MAIN=main.cpp
 all: paint_pathtracer
 
 paint_pathtracer: main.o $(OBJ)
-	$(CC) $(CFLAGS) $^ -o $(BIN)
+	$(CC) $(CFLAGS) $^ -o $(BIN) -O3
 
 %.o: %.cpp
 	$(CC) $(CFLAGS) -c $< -o $@ -O3
