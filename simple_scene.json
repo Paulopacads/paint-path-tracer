@@ -1,8 +1,8 @@
 {
     "name": "my_ppt_result",
-    "width": 512,
-    "height": 384,
-    "spp": 32,
+    "width": 1024,
+    "height": 768,
+    "spp": 64,
     "halton1": 2,
     "halton2": 3,
     "scene":
@@ -45,7 +45,7 @@
                     "ks": 0,
                     "kt": 1,
                     "ke": 0,
-                    "nref": 1.9
+                    "nref": 1.6
                 }
             },
             {
