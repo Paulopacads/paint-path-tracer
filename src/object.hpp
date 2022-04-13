@@ -12,7 +12,7 @@ public:
 
     Object(Material *);
     virtual ~Object() = 0;
-    virtual struct NextObject intersect(Vector3, Vector3);
+    virtual double intersect(Vector3, Vector3);
     virtual bool contains(Vector3);
     virtual Vector3 normal(Vector3);
     virtual struct MaterialInfo getMaterialInfo(Vector3);
@@ -25,7 +25,7 @@ public:
     double radius;
 
     Sphere(Material *, Vector3, double);
-    struct NextObject intersect(Vector3, Vector3);
+    double intersect(Vector3, Vector3);
     bool contains(Vector3);
     Vector3 normal(Vector3);
 };
@@ -37,12 +37,6 @@ public:
     double d;
 
     Plane(Material *, Vector3, double);
-    struct NextObject intersect(Vector3, Vector3);
+    double intersect(Vector3, Vector3);
     Vector3 normal(Vector3);
-};
-
-struct NextObject
-{
-    Object *object;
-    double distance;
 };

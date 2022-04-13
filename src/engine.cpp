@@ -24,7 +24,8 @@ inline Vector3 clampColor(Vector3 color)
     return color;
 }
 
-Image raytrace(Scene scene, int width, int height, int spp, int halton1, int halton2)
+Image raytrace(Scene scene, int width, int height, int spp, int halton1,
+               int halton2)
 {
     Image image = Image(width, height);
 
@@ -45,27 +46,27 @@ Image raytrace(Scene scene, int width, int height, int spp, int halton1, int hal
     Vector3 plantopleft = plancenter + scene.camera.up * planheight / 2
         - scene.camera.right * planwidth / 2;
 
+    Vector3 rightbase = scene.camera.right * planwidth / width;
+    Vector3 upbase = scene.camera.up * planheight / height;
+
 #pragma omp parallel for schedule(dynamic) firstprivate(gen1, gen2)
     for (int i = 0; i < width; ++i)
     {
         fprintf(stdout, "\rRendering, %3.2f%%", 100. * i / width);
         for (int j = 0; j < height; ++j)
         {
-            Vector3 rightbase = scene.camera.right * planwidth / width;
-            Vector3 upbase = scene.camera.up * planheight / height;
-
             double ppp = 1. / spp;
 
             Vector3 color = Vector3();
             for (int s = 0; s < spp; ++s)
             {
-                gen1->next();
-                gen2->next();
+                //gen1->next();
+                //gen2->next();
 
                 Vector3 origin = plantopleft + rightbase * (i + gen1->get())
                     - upbase * (j + gen2->get()); // antialiasing
                 Vector3 vector = (origin - scene.camera.center).norm();
-                Vector3 nc = scene.castRay(origin, vector, 20, gen1, gen2);
+                Vector3 nc = scene.castRay(origin, vector, 0, gen1, gen2);
                 nc = clampColor(nc);
                 color = color + nc * ppp;
             }
