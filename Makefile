@@ -1,8 +1,8 @@
 CC=g++
-CFLAGS= -g -std=c++20 -pedantic -fopenmp
+CFLAGS=-g -std=c++20 -pedantic -fopenmp
 
 BIN=ppt
-SRC=$(wildcard src/*.cpp) $(wildcard libs/*.cpp)
+SRC=$(wildcard src/*.cpp)
 OBJ=$(SRC:.cpp=.o)
 MAIN=main.cpp
 

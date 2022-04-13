@@ -1,5 +1,3 @@
-#include <math.h>
-
 #include "camera.hpp"
 
 Camera::Camera(Vector3 center, Vector3 looking, Vector3 up, double FOV,

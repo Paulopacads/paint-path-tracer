@@ -1,8 +1,3 @@
-#include <cmath>
-#include <iostream>
-#include <math.h>
-#include <random>
-
 #include "scene.hpp"
 
 Scene::Scene(Camera camera, Vector3 sky)
@@ -55,11 +50,10 @@ Vector3 Scene::castRay(Vector3 origin, Vector3 vector, int depth, Halton *gen1,
 
             Vector3 color = Vector3(1, 1, 1) * material.ke * 2;
 
-            int r = rand() % PROB_PRECISION;
-            int pd = material.kd * PROB_PRECISION; // probability of diff ray
-            int ps = material.ks * PROB_PRECISION; // probability of spec ray
+            gen1->next();
+            double r = gen1->get();
 
-            if (r <= pd)
+            if (r <= material.kd)
             {
                 gen1->next();
                 gen2->next();
@@ -71,7 +65,7 @@ Vector3 Scene::castRay(Vector3 origin, Vector3 vector, int depth, Halton *gen1,
                     + multChannels(material.color, bnc) * .1
                     * new_dir.dot(normal);
             }
-            else if (r <= pd + ps)
+            else if (r <= material.kd + material.ks)
             {
                 Vector3 new_dir =
                     (vector - normal * vector.dot(normal) * 2).norm();

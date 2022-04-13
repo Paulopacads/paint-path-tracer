@@ -1,7 +1,3 @@
-#include <math.h>
-#include <stdio.h>
-#include <iostream>
-
 #include "image.hpp"
 
 inline double clamp(double x)
@@ -12,7 +8,7 @@ inline double clamp(double x)
 inline int toInt(double n)
 {
     int res = int(pow(clamp(n), 1 / 2.2) * 255 + .5);
-    return res > 255 ? 255 : res < 0 ? 0 : res;
+    return res;
 }
 
 Image::Image(int width, int height)

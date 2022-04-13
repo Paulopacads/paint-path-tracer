@@ -1,6 +1,3 @@
-#include <math.h>
-#include <ostream>
-
 #include "vector3.hpp"
 
 Vector3::Vector3()

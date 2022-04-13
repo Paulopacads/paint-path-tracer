@@ -1,24 +1,32 @@
-#include <cstdlib>
-#include <ctime>
 #include <fstream>
-#include <random>
+#include <iostream>
 
-#include "libs/json.cpp"
+#include "libs/json.hpp"
 #include "src/engine.hpp"
 
 int main(int argc, char *argv[])
 {
+    if (argc != 2)
+    {
+        std::cerr
+            << "Welcome to `Paint Path-Tracer` (ppt)!\n"
+            << "Usage: " << argv[0] << " FILEPATH\n"
+            << '\n'
+            << "- FILEPATH:\n"
+            << "\tPath to your scene file (json).\n"
+            << "\tAn example should be available as `simple_scene.json`.\n"
+            << "\tVisit https://hackmd.io/@Qwarks/SJPvMQ_X9 for details.\n"
+            << '\n'
+            << "This program was created by melanie.tcheou and paul.galand.\n";
+        return 1;
+    }
+
     std::ifstream source(argv[1]);
 
     nlohmann::json json;
     source >> json;
 
     source.close();
-
-    if (json["with_seed"])
-        srand(json["seed"]);
-    else
-        srand(time(NULL));
 
     nlohmann::json scene = json["scene"];
     nlohmann::json cam = scene["cam"];
@@ -61,11 +69,12 @@ int main(int argc, char *argv[])
                 material = new Material();
 
             scene1.objects.push_back(new Plane(
-                material, Vector3(object["pos"]["norm"]), object["pos"]["d"]));
+                material, Vector3(object["norm"]), object["d"]));
         }
     }
 
-    Image image = raytrace(scene1, width, height, json["spp"], json["halton"]);
+    Image image = raytrace(scene1, width, height, json["spp"], json["halton1"],
+                           json["halton2"]);
     image.save(json["name"]);
 
     return 0;

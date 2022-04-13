@@ -1,4 +1,3 @@
-#include <iostream>
 #include "halton.hpp"
 
 void Halton::init(int index, int base)

@@ -1,7 +1,5 @@
 #pragma once
 
-#include <string>
-
 #include "vector3.hpp"
 
 class Image

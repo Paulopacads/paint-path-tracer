@@ -2,7 +2,7 @@
 
 #include <ostream>
 
-#include "../libs/json.cpp"
+#include "../libs/json.hpp"
 
 class Vector3
 {

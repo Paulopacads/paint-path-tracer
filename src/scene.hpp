@@ -1,9 +1,5 @@
 #pragma once
 
-#define PROB_PRECISION 1024
-
-#include <vector>
-
 #include "camera.hpp"
 #include "halton.hpp"
 #include "object.hpp"
