@@ -76,7 +76,7 @@ Vector3 Scene::castRay(Vector3 origin, Vector3 vector, int depth, Halton *gen1,
     // computation of a specular impact
     if (r <= material.kd + material.ks)
     {
-        Vector3 new_dir = vector - normal * vector.dot(normal) * 2;
+        Vector3 new_dir = (vector - normal * vector.dot(normal) * 2).norm();
 
         return color + castRay(impact, new_dir, depth + 1, gen1, gen2, rnd);
     }
@@ -95,6 +95,6 @@ Vector3 Scene::castRay(Vector3 origin, Vector3 vector, int depth, Halton *gen1,
     if (c2 < 0) // angle of refraction beyond critical angle -> no refraction
         return Vector3();
 
-    Vector3 new_dir = vector * nrefr + normal * (nrefr * c1 - sqrt(c2));
+    Vector3 new_dir = (vector * nrefr + normal * (nrefr * c1 - sqrt(c2))).norm();
     return color + castRay(impact, new_dir, depth + 1, gen1, gen2, rnd);
 }
