@@ -80,7 +80,9 @@ int main(int argc, char *argv[])
 
     Image image = trace(scene1, width, height, json["spp"], json["halton1"],
                         json["halton2"]);
+    fprintf(stderr, "\rSaving image...     ");
     image.save(json["name"]);
+    fprintf(stderr, "\rDone!               \n");
 
     return 0;
 }

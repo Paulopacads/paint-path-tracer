@@ -14,8 +14,7 @@ void Halton::init(int index, int base)
     this->current = r;
 }
 
-// Compute Halton next sequence result based on Wikipedia algorithm 
-void Halton::next()
+double Halton::next()
 {
     double r = 1. - current - 1e-6;
     double ibase = 1. / base;
@@ -34,6 +33,8 @@ void Halton::next()
 
         current += t + t2 - 1;
     }
+
+    return current;
 }
 
 double Halton::get()

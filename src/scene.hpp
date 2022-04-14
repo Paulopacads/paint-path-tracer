@@ -12,5 +12,5 @@ public:
     Vector3 sky;
 
     Scene(Camera, Vector3);
-    Vector3 castRay(Vector3, Vector3, int, Halton *, Halton *);
+    Vector3 castRay(Vector3, Vector3, int, Halton *, Halton *, Halton *);
 };

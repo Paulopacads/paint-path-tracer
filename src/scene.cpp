@@ -13,6 +13,7 @@ struct NextObject
     double distance;
 };
 
+// get the next object on the ray; {null, infty} if no object
 inline struct NextObject getNextObject(Scene *scene, Vector3 origin,
                                        Vector3 vector)
 {
@@ -30,6 +31,9 @@ inline struct NextObject getNextObject(Scene *scene, Vector3 origin,
     return res;
 }
 
+// uniform distribution on hemisphere with random parameters
+// > https://cseweb.ucsd.edu/classes/sp17/cse168-a/CSE168_07_Random.pdf
+// > from Steve Rotenberg ~ slide 31
 inline Vector3 hemisphere(double u1, double u2)
 {
     double r = sqrt(1. - u1 * u1);
@@ -38,13 +42,13 @@ inline Vector3 hemisphere(double u1, double u2)
 }
 
 Vector3 Scene::castRay(Vector3 origin, Vector3 vector, int depth, Halton *gen1,
-                       Halton *gen2)
+                       Halton *gen2, Halton *rnd)
 {
-    if (depth >= 20)
-        return Vector3();
+    if (depth >= 20) // we could implement Russian Roulette
+        return Vector3(); // from a certain depth to avoid brutal stop
 
     struct NextObject next = getNextObject(this, origin, vector);
-    if (next.object == NULL)
+    if (next.object == NULL) // no hit
         return this->sky;
 
     Vector3 impact = origin + vector * next.distance;
@@ -53,17 +57,18 @@ Vector3 Scene::castRay(Vector3 origin, Vector3 vector, int depth, Halton *gen1,
 
     Vector3 color = Vector3(1, 1, 1) * material.ke * 2;
 
-    double r = gen1->get();
+    // kd + ks + kt = 1, we evaluate a random to get the way we're bouncing
+    // 3 possibilities :
+    //  - r < kd : diffusion bounce;
+    //  - kd < r < ks : specular bounce;
+    //  - ks < r : transparency "bounce"
+    double r = rnd->next();
 
     // computation of a diffuse impact
     if (r <= material.kd)
     {
-        gen1->next();
-        gen2->next();
-
-        Vector3 new_dir = normal + hemisphere(gen1->get(), gen2->get());
-        Vector3 bnc =
-            castRay(impact, new_dir, depth + 1, gen1, gen2);
+        Vector3 new_dir = normal + hemisphere(gen1->next(), gen2->next());
+        Vector3 bnc = castRay(impact, new_dir, depth + 1, gen1, gen2, rnd);
 
         return color + material.color.mult(bnc) * new_dir.dot(normal) * .1;
     }
@@ -71,25 +76,25 @@ Vector3 Scene::castRay(Vector3 origin, Vector3 vector, int depth, Halton *gen1,
     // computation of a specular impact
     if (r <= material.kd + material.ks)
     {
-        Vector3 new_dir = (vector - normal * vector.dot(normal) * 2).norm();
+        Vector3 new_dir = vector - normal * vector.dot(normal) * 2;
 
-        return color
-            + castRay(impact, new_dir, depth + 1, gen1, gen2);
+        return color + castRay(impact, new_dir, depth + 1, gen1, gen2, rnd);
     }
 
-    double nrefr = 1 / material.nrefr;
-    if (normal.dot(vector) > 0)
+    // compute material1 to material2 refraction index
+    double nrefr = 1 / material.nrefr; // from air to material
+    if (normal.dot(vector) > 0) // coming from inside the object ? (vector and
+                                // normal in same direction)
     {
-        normal = normal * -1;
-        nrefr = 1 / nrefr;
+        normal = normal * -1; // correct normal direction
+        nrefr = 1 / nrefr; // from material to air
     }
 
     double c1 = normal.dot(vector) * -1;
     double c2 = 1 - nrefr * nrefr * (1 - c1 * c1);
-    if (c2 < 0)
+    if (c2 < 0) // angle of refraction beyond critical angle -> no refraction
         return Vector3();
 
-    Vector3 new_dir = (vector * nrefr + normal * (nrefr * c1 - sqrt(c2))).norm();
-    return color
-        + castRay(impact, new_dir, depth + 1, gen1, gen2);
+    Vector3 new_dir = vector * nrefr + normal * (nrefr * c1 - sqrt(c2));
+    return color + castRay(impact, new_dir, depth + 1, gen1, gen2, rnd);
 }
