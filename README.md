@@ -1,3 +1,11 @@
 # paint-path-tracer
 
-structure: https://hackmd.io/@Qwarks/SkPysMBZq
+Compilation:
+```
+$ make
+```
+
+Usage: (for more detail, just execute `./ppt`)
+```
+$ ./ppt file.json
+```
