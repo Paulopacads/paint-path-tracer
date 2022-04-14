@@ -24,8 +24,8 @@ inline Vector3 clampColor(Vector3 color)
     return color;
 }
 
-Image raytrace(Scene scene, int width, int height, int spp, int halton1,
-               int halton2)
+Image trace(Scene scene, int width, int height, int spp, int halton1,
+            int halton2)
 {
     Image image = Image(width, height);
 
@@ -60,8 +60,8 @@ Image raytrace(Scene scene, int width, int height, int spp, int halton1,
             Vector3 color = Vector3();
             for (int s = 0; s < spp; ++s)
             {
-                //gen1->next();
-                //gen2->next();
+                // gen1->next();
+                // gen2->next();
 
                 Vector3 origin = plantopleft + rightbase * (i + gen1->get())
                     - upbase * (j + gen2->get()); // antialiasing

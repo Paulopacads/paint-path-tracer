@@ -68,13 +68,13 @@ int main(int argc, char *argv[])
             else
                 material = new Material();
 
-            scene1.objects.push_back(new Plane(
-                material, Vector3(object["norm"]), object["d"]));
+            scene1.objects.push_back(
+                new Plane(material, Vector3(object["norm"]), object["d"]));
         }
     }
 
-    Image image = raytrace(scene1, width, height, json["spp"], json["halton1"],
-                           json["halton2"]);
+    Image image = trace(scene1, width, height, json["spp"], json["halton1"],
+                        json["halton2"]);
     image.save(json["name"]);
 
     return 0;
