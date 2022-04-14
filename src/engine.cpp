@@ -60,9 +60,6 @@ Image trace(Scene scene, int width, int height, int spp, int halton1,
             Vector3 color = Vector3();
             for (int s = 0; s < spp; ++s)
             {
-                // gen1->next();
-                // gen2->next();
-
                 Vector3 origin = plantopleft + rightbase * (i + gen1->get())
                     - upbase * (j + gen2->get()); // antialiasing
                 Vector3 vector = (origin - scene.camera.center).norm();

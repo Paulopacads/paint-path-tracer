@@ -34,7 +34,7 @@ inline Vector3 hemisphere(double u1, double u2)
 {
     double r = sqrt(1. - u1 * u1);
     double phi = 2 * M_PI * u2;
-    return Vector3(cos(phi) * r, sin(phi) * r, u1);
+    return Vector3(cos(phi) * r, u1, sin(phi) * r);
 }
 
 Vector3 Scene::castRay(Vector3 origin, Vector3 vector, int depth, Halton *gen1,
@@ -53,7 +53,6 @@ Vector3 Scene::castRay(Vector3 origin, Vector3 vector, int depth, Halton *gen1,
 
     Vector3 color = Vector3(1, 1, 1) * material.ke * 2;
 
-    //gen1->next();
     double r = gen1->get();
 
     // computation of a diffuse impact
@@ -78,7 +77,6 @@ Vector3 Scene::castRay(Vector3 origin, Vector3 vector, int depth, Halton *gen1,
             + castRay(impact, new_dir, depth + 1, gen1, gen2);
     }
 
-    // computation of a transparent impact
     double nrefr = 1 / material.nrefr;
     if (normal.dot(vector) > 0)
     {
