@@ -67,11 +67,11 @@ Image trace(Scene scene, int width, int height, int spp, int halton1,
                     - upbase * (j + gen2->get()); // antialiasing
                 Vector3 vector = (origin - scene.camera.center).norm();
                 Vector3 nc = scene.castRay(origin, vector, 0, gen1, gen2);
-                nc = clampColor(nc);
+                nc = nc;
                 color = color + nc * ppp;
             }
 
-            image.setPixel(i, j, color);
+            image.setPixel(i, j, clampColor(color));
         }
     }
     return image;
