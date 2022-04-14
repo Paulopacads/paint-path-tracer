@@ -38,7 +38,7 @@ inline Vector3 hemisphere(double u1, double u2)
 {
     double r = sqrt(1. - u1 * u1);
     double phi = 2 * M_PI * u2;
-    return Vector3(cos(phi) * r, u1, sin(phi) * r);
+    return Vector3(cos(phi) * r, sin(phi) * r, u1);
 }
 
 Vector3 Scene::castRay(Vector3 origin, Vector3 vector, int depth, Halton *gen1,
@@ -76,7 +76,7 @@ Vector3 Scene::castRay(Vector3 origin, Vector3 vector, int depth, Halton *gen1,
     // computation of a specular impact
     if (r <= material.kd + material.ks)
     {
-        Vector3 new_dir = (vector - normal * vector.dot(normal) * 2).norm();
+        Vector3 new_dir = vector - normal * vector.dot(normal) * 2;
 
         return color + castRay(impact, new_dir, depth + 1, gen1, gen2, rnd);
     }
@@ -95,6 +95,6 @@ Vector3 Scene::castRay(Vector3 origin, Vector3 vector, int depth, Halton *gen1,
     if (c2 < 0) // angle of refraction beyond critical angle -> no refraction
         return Vector3();
 
-    Vector3 new_dir = (vector * nrefr + normal * (nrefr * c1 - sqrt(c2))).norm();
+    Vector3 new_dir = vector * nrefr + normal * (nrefr * c1 - sqrt(c2));
     return color + castRay(impact, new_dir, depth + 1, gen1, gen2, rnd);
 }
