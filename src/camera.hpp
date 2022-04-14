@@ -2,16 +2,17 @@
 
 #include "vector3.hpp"
 
+// camera for a scene
 class Camera
 {
 public:
-    Vector3 center;
-    Vector3 up;
+    Vector3 center; // position
+    Vector3 up; // for rotation
     Vector3 right;
-    Vector3 direction;
+    Vector3 direction; // vector forward
     double alphaFOV;
     double betaFOV;
-    double distance;
+    double distance; // distance between center and proj. plane
 
     Camera(Vector3, Vector3, Vector3, double, double, double);
 };

@@ -4,8 +4,11 @@
 #include "libs/json.hpp"
 #include "src/engine.hpp"
 
+using Json = nlohmann::json;
+
 int main(int argc, char *argv[])
 {
+    // no file specified
     if (argc != 2)
     {
         std::cerr
@@ -21,17 +24,19 @@ int main(int argc, char *argv[])
         return 1;
     }
 
+    // get scene infos
     std::ifstream source(argv[1]);
 
-    nlohmann::json json;
+    Json json;
     source >> json;
 
     source.close();
 
-    nlohmann::json scene = json["scene"];
-    nlohmann::json cam = scene["cam"];
-    nlohmann::json sources = scene["src"];
-    nlohmann::json object = scene["obj"];
+    // from Json to Scene
+    Json scene = json["scene"];
+    Json cam = scene["cam"];
+    Json sources = scene["src"];
+    Json object = scene["obj"];
 
     double width = json["width"];
     double height = json["height"];
@@ -47,7 +52,7 @@ int main(int argc, char *argv[])
 
     Scene scene1 = Scene(camera, sky);
 
-    for (nlohmann::json object : scene["obj"])
+    for (Json object : scene["obj"])
     {
         if (object["type"] == "Sphere")
         {

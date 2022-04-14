@@ -1,25 +1,18 @@
 #include "vector3.hpp"
 
 Vector3::Vector3()
-{
-    this->x = 0;
-    this->y = 0;
-    this->z = 0;
-}
+    : Vector3(0, 0, 0)
+{}
 
 Vector3::Vector3(double x, double y, double z)
-{
-    this->x = x;
-    this->y = y;
-    this->z = z;
-}
+    : x(x)
+    , y(y)
+    , z(z)
+{}
 
 Vector3::Vector3(nlohmann::json json)
-{
-    this->x = json["x"];
-    this->y = json["y"];
-    this->z = json["z"];
-}
+    : Vector3(json["x"], json["y"], json["z"])
+{}
 
 Vector3 Vector3::mult(const Vector3 &v) const
 {
